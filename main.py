@@ -16,11 +16,11 @@ class Object(pygame.sprite.Sprite):
 # window settings
 width = 800
 height = 600
-
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Ракета")
 pygame.display.set_icon(pygame.image.load("icon.ico"))
-run = True
+
+
 
 # images
 bg = pygame.transform.scale(pygame.image.load("img/bg.png"), (width, height))
@@ -40,11 +40,18 @@ large_meteor2_img = pygame.transform.scale(
     pygame.image.load("img/large2.png"), (56, 56))
 ufo_img = pygame.transform.scale(
     pygame.image.load("img/ufo.png"), (62, 25))
+banana_img = pygame.transform.scale(
+    pygame.image.load("img/banana.png"), (13, 32))
+apple_img = pygame.transform.scale(
+    pygame.image.load("img/apple.png"), (26, 28))
+cherry_img = pygame.transform.scale(
+    pygame.image.load("img/cherry.png"), (27, 30))
 
 # groups objects
 all_objects = pygame.sprite.Group()
 meteors = pygame.sprite.Group()
 ufos = pygame.sprite.Group()
+fruits = pygame.sprite.Group()
 
 # player object
 start_x = 590
@@ -52,7 +59,6 @@ start_y = 400
 rocket = Object(player_img, start_x, start_y, 2)
 
 # ufos
-
 ufo_x1 = 375
 ufo_y1 = 110
 ufo1 = Object(ufo_img, ufo_x1, ufo_y1, 2)
@@ -64,6 +70,24 @@ ufo2 = Object(ufo_img, ufo_x2, ufo_y2, 3)
 ufo_x3 = 207
 ufo_y3 = 470
 ufo3 = Object(ufo_img, ufo_x3, ufo_y3, 0)
+
+# fruits
+banana_x = 400
+banana_y = 110
+banana = Object(banana_img, banana_x, banana_y, 0)
+
+apple_x = 120
+apple_y = 140
+apple = Object(apple_img, apple_x, apple_y, 0)
+
+cherry_x = 225
+cherry_y = 420
+cherry = Object(cherry_img, cherry_x, cherry_y, 0)
+
+# adds fruits
+fruits.add(banana)
+fruits.add(apple)
+fruits.add(cherry)
 
 # meteors
 meteor1 = Object(small_meteor2_img, 630, 420, 0)
@@ -155,12 +179,16 @@ meteors.add(meteor40)
 meteors.add(meteor41)
 meteors.add(meteor42)
 
+# adds ufos
 ufos.add(ufo1)
 ufos.add(ufo2)
 ufos.add(ufo3)
 
 # adds all_objects
 all_objects.add(rocket)
+all_objects.add(banana)
+all_objects.add(apple)
+all_objects.add(cherry)
 all_objects.add(ufo1)
 all_objects.add(ufo2)
 all_objects.add(ufo3)
@@ -207,6 +235,9 @@ all_objects.add(meteor40)
 all_objects.add(meteor41)
 all_objects.add(meteor42)
 
+run = True
+points = 0
+
 while run:
 
     window.blit(bg, (0, 0))
@@ -249,6 +280,12 @@ while run:
         # print(pygame.sprite.pygame.sprite.spritecollide(rocket, ufos, False))
         rocket.rect.x = start_x
         rocket.rect.y = start_y
+    
+    # get points
+    if len(pygame.sprite.pygame.sprite.spritecollide(rocket, fruits, True)) > 0:
+        # print(pygame.sprite.pygame.sprite.spritecollide(rocket, ufos, False))
+        points += 1
+        print("Баллов:", points)
 
     # draw objects in window
     all_objects.update()

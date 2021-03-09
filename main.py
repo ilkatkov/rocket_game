@@ -1,6 +1,12 @@
 import pygame
+from tkinter import *
+from tkinter import messagebox as mb
 
-# class for player and meteors
+# init pygame
+pygame.init()
+
+# create hide Tk window
+Tk().wm_withdraw()
 
 
 class Object(pygame.sprite.Sprite):
@@ -19,7 +25,6 @@ height = 600
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Ракета")
 pygame.display.set_icon(pygame.image.load("icon.ico"))
-
 
 
 # images
@@ -46,12 +51,15 @@ apple_img = pygame.transform.scale(
     pygame.image.load("img/apple.png"), (26, 28))
 cherry_img = pygame.transform.scale(
     pygame.image.load("img/cherry.png"), (27, 30))
+portal_img = pygame.transform.scale(
+    pygame.image.load("img/portal.png"), (90, 90))
 
 # groups objects
 all_objects = pygame.sprite.Group()
 meteors = pygame.sprite.Group()
 ufos = pygame.sprite.Group()
 fruits = pygame.sprite.Group()
+portals = pygame.sprite.Group()
 
 # player object
 start_x = 590
@@ -76,18 +84,18 @@ banana_x = 400
 banana_y = 110
 banana = Object(banana_img, banana_x, banana_y, 0)
 
-apple_x = 120
-apple_y = 140
+apple_x = 130
+apple_y = 285
 apple = Object(apple_img, apple_x, apple_y, 0)
 
 cherry_x = 225
 cherry_y = 420
 cherry = Object(cherry_img, cherry_x, cherry_y, 0)
 
-# adds fruits
-fruits.add(banana)
-fruits.add(apple)
-fruits.add(cherry)
+# portals
+portal_x = 110
+portal_y = 140
+portal = Object(portal_img, portal_x, portal_y, 0)
 
 # meteors
 meteor1 = Object(small_meteor2_img, 630, 420, 0)
@@ -179,6 +187,11 @@ meteors.add(meteor40)
 meteors.add(meteor41)
 meteors.add(meteor42)
 
+# adds fruits
+fruits.add(banana)
+fruits.add(apple)
+fruits.add(cherry)
+
 # adds ufos
 ufos.add(ufo1)
 ufos.add(ufo2)
@@ -235,11 +248,16 @@ all_objects.add(meteor40)
 all_objects.add(meteor41)
 all_objects.add(meteor42)
 
+# text
+fruits_font = pygame.font.Font(None, 35)
+fruits_text = fruits_font.render("Фрукты: 0", True, pygame.Color("white"))
+
 run = True
 points = 0
 
 while run:
 
+    # draw background
     window.blit(bg, (0, 0))
 
     # exit
@@ -273,21 +291,31 @@ while run:
 
     # rocket goto start
     if len(pygame.sprite.pygame.sprite.spritecollide(rocket, meteors, False)) > 0:
-        # print(pygame.sprite.pygame.sprite.spritecollide(rocket, meteors, False))
         rocket.rect.x = start_x
         rocket.rect.y = start_y
     if len(pygame.sprite.pygame.sprite.spritecollide(rocket, ufos, False)) > 0:
-        # print(pygame.sprite.pygame.sprite.spritecollide(rocket, ufos, False))
         rocket.rect.x = start_x
         rocket.rect.y = start_y
-    
+
     # get points
     if len(pygame.sprite.pygame.sprite.spritecollide(rocket, fruits, True)) > 0:
-        # print(pygame.sprite.pygame.sprite.spritecollide(rocket, ufos, False))
         points += 1
-        print("Баллов:", points)
+        fruits_text = fruits_font.render(
+            ("Фрукты: " + str(points)), True, pygame.Color("white"))
+        if points == 3:
+            rocket.rect.x = start_x
+            rocket.rect.y = start_y
+            portals.add(portal)
+            all_objects.add(portal)
+            mb.showinfo("Ракета", "НЛО телепортируют Вас в начало!")
+
+    # player touch the portal
+    if len(pygame.sprite.pygame.sprite.spritecollide(rocket, portals, False)) > 0:
+        mb.showinfo("Ракета", "Вы победили!")
+        run = False
 
     # draw objects in window
     all_objects.update()
     all_objects.draw(window)
+    window.blit(fruits_text, (600, 30))
     pygame.display.update()

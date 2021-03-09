@@ -25,21 +25,21 @@ run = True
 # images
 bg = pygame.transform.scale(pygame.image.load("img/bg.png"), (width, height))
 player_img = pygame.transform.scale(
-    pygame.image.load("img/player.png"), (32, 32))
+    pygame.image.load("img/player.png"), (16, 32))
 small_meteor1_img = pygame.transform.scale(
     pygame.image.load("img/small1.png"), (16, 16))
 small_meteor2_img = pygame.transform.scale(
     pygame.image.load("img/small2.png"), (16, 16))
 medium_meteor1_img = pygame.transform.scale(
-    pygame.image.load("img/medium1.png"), (32, 32))
+    pygame.image.load("img/medium1.png"), (29, 29))
 medium_meteor2_img = pygame.transform.scale(
-    pygame.image.load("img/medium2.png"), (32, 32))
+    pygame.image.load("img/medium2.png"), (29, 27))
 large_meteor1_img = pygame.transform.scale(
-    pygame.image.load("img/large1.png"), (64, 64))
+    pygame.image.load("img/large1.png"), (55, 57))
 large_meteor2_img = pygame.transform.scale(
-    pygame.image.load("img/large2.png"), (64, 64))
+    pygame.image.load("img/large2.png"), (56, 56))
 ufo_img = pygame.transform.scale(
-    pygame.image.load("img/ufo.png"), (64, 32))
+    pygame.image.load("img/ufo.png"), (62, 25))
 
 # groups objects
 all_objects = pygame.sprite.Group()
@@ -70,15 +70,15 @@ meteor1 = Object(small_meteor2_img, 630, 420, 0)
 meteor2 = Object(medium_meteor2_img, 630, 435, 0)
 meteor3 = Object(medium_meteor1_img, 620, 385, 0)
 meteor4 = Object(large_meteor1_img, 610, 315, 0)
-meteor5 = Object(medium_meteor2_img, 580, 325, 0)
+meteor5 = Object(medium_meteor2_img, 600, 285, 0)
 meteor6 = Object(large_meteor2_img, 540, 270, 0)
 meteor7 = Object(medium_meteor1_img, 515, 278, 0)
 meteor8 = Object(large_meteor1_img, 500, 215, 0)
 meteor9 = Object(medium_meteor2_img, 465, 215, 0)
 meteor10 = Object(large_meteor2_img, 565, 445, 0)
-meteor11 = Object(small_meteor1_img, 565, 443, 0)
+meteor11 = Object(small_meteor1_img, 556, 443, 0)
 meteor12 = Object(large_meteor1_img, 510, 390, 0)
-meteor13 = Object(medium_meteor1_img, 485, 390, 0)
+meteor13 = Object(medium_meteor1_img, 480, 390, 0)
 meteor14 = Object(large_meteor2_img, 420, 385, 0)
 meteor15 = Object(medium_meteor1_img, 390, 385, 0)
 meteor16 = Object(medium_meteor2_img, 355, 365, 0)
@@ -154,6 +154,10 @@ meteors.add(meteor39)
 meteors.add(meteor40)
 meteors.add(meteor41)
 meteors.add(meteor42)
+
+ufos.add(ufo1)
+ufos.add(ufo2)
+ufos.add(ufo3)
 
 # adds all_objects
 all_objects.add(rocket)
@@ -235,6 +239,16 @@ while run:
         ufo1.speed *= -1
     if len(pygame.sprite.pygame.sprite.spritecollide(ufo2, meteors, False)) > 0:
         ufo2.speed *= -1
+
+    # rocket goto start
+    if len(pygame.sprite.pygame.sprite.spritecollide(rocket, meteors, False)) > 0:
+        # print(pygame.sprite.pygame.sprite.spritecollide(rocket, meteors, False))
+        rocket.rect.x = start_x
+        rocket.rect.y = start_y
+    if len(pygame.sprite.pygame.sprite.spritecollide(rocket, ufos, False)) > 0:
+        # print(pygame.sprite.pygame.sprite.spritecollide(rocket, ufos, False))
+        rocket.rect.x = start_x
+        rocket.rect.y = start_y
 
     # draw objects in window
     all_objects.update()

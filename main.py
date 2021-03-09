@@ -5,6 +5,7 @@ height = 600
 
 window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Ракета")
+pygame.display.set_icon(pygame.image.load("icon.ico"))
 run = True
 
 bg = pygame.transform.scale(pygame.image.load("img/bg.png"), (width, height))
